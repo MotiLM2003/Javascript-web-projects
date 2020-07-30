@@ -3,26 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Infinity Scroll Project Overview</title>
+    <title>Picture in picture</title>
     <link
       rel="icon"
       type="image/png"
       href=" http://www.google.com/s2/favicons?domain=css-tricks.com"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
-    />
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Unsplash API -infinte scroll</h1>
+    <!-- Video -->
+    <video id="video" controls height="350px" width="640px" hidden></video>
 
-    <div class="loader" id="loader">
-      <img src="loader.svg" alt="Loading" />
+    <!-- Button -->
+    <div class="button-container">
+      <button id="button">START</button>
     </div>
 
-    <div class="image-container" id="image-container"></div>
     <script src="script.js"></script>
   </body>
 </html>

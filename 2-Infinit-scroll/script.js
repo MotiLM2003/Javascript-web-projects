@@ -15,7 +15,7 @@ let totalImages = 0;
 
 function imageLoaded() {
   imagesLoaded++;
-  if (magesLoaded === totalImages) {
+  if (imagesLoaded === totalImages) {
     ready = true;
   }
   console.log('image');
@@ -34,10 +34,10 @@ function displayPhotos() {
   totalImages = photosArray.length;
   photosArray.forEach((photo) => {
     const item = document.createElement('a');
-    setAttributes(item, { href: photo.link.html, target: '_blank' });
+    setAttributes(item, { href: photo.links.html, target: '_blank' });
     const img = document.createElement('img');
     setAttributes(img, {
-      src: photo.url.regular,
+      src: photo.urls.regular,
       title: photo.alt_description,
       alt: photo.alt_description,
     });
@@ -53,12 +53,14 @@ async function getPhotos() {
   try {
     const response = await fetch(apiUrl);
     photosArray = await response.json();
+    loader.hidden = true;
     displayPhotos();
   } catch (error) {
     console.log(error);
   }
 }
 
+document.addEventListener('DOMContentLoaded', getPhotos);
 //getPhotos();
 window.addEventListener('scroll', (item) => {
   if (
@@ -68,6 +70,7 @@ window.addEventListener('scroll', (item) => {
     ready = false;
     imagesLoaded = 0;
     getPhotos();
-    console.log('triggerd 1');
   }
 });
+
+//getPhotos();
