@@ -1,4 +1,8 @@
-var VoiceRSS = {
+// VoiceRSS Javascript SDK
+const audioElement = document.getElementById('audio');
+const button = document.getElementById('button');
+
+const VoiceRSS = {
   speech: function (e) {
     this._validate(e), this._request(e);
   },
@@ -34,7 +38,7 @@ var VoiceRSS = {
     (t.onreadystatechange = function () {
       if (4 == t.readyState && 200 == t.status) {
         if (0 == t.responseText.indexOf('ERROR')) throw t.responseText;
-        new Audio(t.responseText).play();
+        (audioElement.src = t.responseText), audioElement.play();
       }
     }),
       t.open('POST', 'https://api.voicerss.org/', !0),
@@ -53,8 +57,6 @@ var VoiceRSS = {
       (e.src || '') +
       '&hl=' +
       (e.hl || '') +
-      '&v=' +
-      (e.v || '') +
       '&r=' +
       (e.r || '') +
       '&c=' +
@@ -102,39 +104,24 @@ var VoiceRSS = {
     throw 'The browser does not support HTTP request';
   },
 };
-const videoElement = document.getElementById('video');
-const button = document.getElementById('button');
 
-// Prompt to select media stream, pass to video element , then play
-async function selelctMediaStream() {
-  try {
-    const mediaStream = await navigator.mediaDevices.getDisplayMedia();
-    videoElement.srcObject = mediaStream;
-    videoElement.onloadedmetadata = () => {
-      videoElement.play();
-    };
-  } catch (error) {
-    console.log('err: ', error);
-  }
+function toggleButton() {
+  button.disabled = !button.disabled;
 }
 
-selelctMediaStream();
-
-button.addEventListener('click', async () => {
-  // disable button
-  button.disabled = true;
-  // start picture in picture
-  await videoElement.requestPictureInPicture();
-  //
-  button.disabled = false;
+button.addEventListener('click', () => {
+  getJokes();
+  //test();
 });
 
+audioElement.addEventListener('ended', toggleButton);
+
 // VoiceRSS Javascript SDK
-function test() {
-  console.log('here');
+function test(str) {
+  console.log('ma kora ya gever');
   VoiceRSS.speech({
     key: '342db4f265a84004a099d8b060a9bdb6',
-    src: 'Hello, world!',
+    src: str,
     hl: 'en-us',
     v: 'Linda',
     r: 0,
@@ -144,4 +131,20 @@ function test() {
   });
 }
 
-test();
+async function getJokes() {
+  const apiUrl = 'https://sv443.net/jokeapi/v2/joke/Programming';
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    console.log(data);
+    const joke =
+      data.type === 'twopart'
+        ? `${data.setup} ... ... ${data.delivery}`
+        : data.joke;
+    console.log(data.type);
+    toggleButton();
+    test(joke);
+  } catch (error) {
+    console.log(error);
+  }
+}
